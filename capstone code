@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void sstf(int disk[], int n, int head) {
+    int seek_count = 0;
+    int distance, min_distance, index;
+    int visited[n];
+    
+    // Initialize visited array to mark the processed requests
+    for (int i = 0; i < n; i++) {
+        visited[i] = 0;
+    }
+
+    // Loop through until all requests are processed
+    for (int i = 0; i < n; i++) {
+        min_distance = 999999;
+        index = -1;
+
+        // Find the closest unvisited request
+        for (int j = 0; j < n; j++) {
+            if (visited[j] == 0) {
+                distance = abs(disk[j] - head);
+                if (distance < min_distance) {
+                    min_distance = distance;
+                    index = j;
+                }
+            }
+        }
+
+        // Move the head to the selected request
+        visited[index] = 1;
+        seek_count += min_distance;
+        head = disk[index];
+        
+        printf("Move disk head to position: %d\n", head);
+    }
+    
+    printf("Total seek count: %d\n", seek_count);
+}
+
+int main() {
+    int disk[] = {95, 180, 34, 119, 11, 123, 62, 64};  // Disk requests
+    int n = sizeof(disk) / sizeof(disk[0]);  // Number of requests
+    int head = 50;  // Initial head position
+    
+    printf("Disk Scheduling using SSTF Algorithm\n");
+    printf("Initial head position: %d\n", head);
+    
+    sstf(disk, n, head);
+    
+    return 0;
+}
